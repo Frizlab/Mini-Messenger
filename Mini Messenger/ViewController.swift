@@ -25,6 +25,11 @@ class ViewController: UIViewController, UIWebViewDelegate {
 		super.didReceiveMemoryWarning()
 	}
 	
+	@IBAction func goBackAction(_ sender: AnyObject) {
+		guard let gesture = sender as? UIGestureRecognizer, gesture.state == .recognized else {return}
+		webView.goBack()
+	}
+	
 	func webViewDidStartLoad(_ webView: UIWebView) {
 		UIView.animate(withDuration: 0.25){ self.loadingView.alpha = 1 }
 	}

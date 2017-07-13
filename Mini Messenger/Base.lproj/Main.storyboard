@@ -44,6 +44,7 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="flr-Nn-GSe" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="EhB-L3-B8x"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="s8F-1Q-esj" secondAttribute="trailing" id="GWg-52-j5h"/>
@@ -54,6 +55,9 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="flr-Nn-GSe" secondAttribute="bottom" id="whG-uC-hqS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="bkM-T1-tdX" appends="YES" id="00A-T2-lID"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="loadingView" destination="s8F-1Q-esj" id="L1M-Fz-iHb"/>
@@ -61,6 +65,12 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="bkM-T1-tdX">
+                    <rectEdge key="edges" left="YES"/>
+                    <connections>
+                        <action selector="goBackAction:" destination="BYZ-38-t0r" id="QP2-Aa-Q9f"/>
+                    </connections>
+                </screenEdgePanGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="32.799999999999997" y="36.431784107946029"/>
         </scene>
