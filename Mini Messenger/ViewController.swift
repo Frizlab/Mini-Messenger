@@ -21,6 +21,8 @@ class ViewController: UIViewController, UIWebViewDelegate {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
+		viewLoadingError.alpha = 0
+		
 		loadMainPage()
 		observerForEnterBg = NotificationCenter.default.addObserver(forName: .UIApplicationDidEnterBackground, object: nil, queue: .main) { [weak self] n in
 			self?.dateEnteredBg = Date()
