@@ -22,6 +22,19 @@ class ViewController: UIViewController, UIWebViewDelegate {
 		super.viewDidLoad()
 		
 		loadMainPage()
+		observerForEnterBg = NotificationCenter.default.addObserver(forName: .UIApplicationDidEnterBackground, object: nil, queue: .main) { [weak self] n in
+			self?.dateEnteredBg = Date()
+		}
+		observerForEnterFg = NotificationCenter.default.addObserver(forName: .UIApplicationWillEnterForeground, object: nil, queue: .main) { [weak self] n in
+			guard let strongSelf = self, let dateBg = strongSelf.dateEnteredBg, dateBg.timeIntervalSinceNow <= -15 else {return}
+			strongSelf.loadMainPage()
+		}
+	}
+	
+	deinit {
+		/* Not actually needed with iOS 11 IIRC. */
+		if let observer = observerForEnterBg {NotificationCenter.default.removeObserver(observer, name: .UIApplicationDidEnterBackground, object: nil)}
+		if let observer = observerForEnterFg {NotificationCenter.default.removeObserver(observer, name: .UIApplicationWillEnterForeground, object: nil)}
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -50,6 +63,10 @@ class ViewController: UIViewController, UIWebViewDelegate {
 		UIView.animate(withDuration: 0.25){ self.viewLoading.alpha = 0; self.viewLoadingError.alpha = 1; self.webView.alpha = 0 }
 	}
 	
+	private var dateEnteredBg: Date?
+	private var observerForEnterBg: NSObjectProtocol?
+	private var observerForEnterFg: NSObjectProtocol?
+
 	private func loadMainPage() {
 		webView.loadRequest(URLRequest(url: URL(string: "https://facebook.com/messages/")!))
 	}
