@@ -24,10 +24,10 @@ class ViewController: UIViewController, UIWebViewDelegate {
 		viewLoadingError.alpha = 0
 		
 		loadMainPage()
-		observerForEnterBg = NotificationCenter.default.addObserver(forName: .UIApplicationDidEnterBackground, object: nil, queue: .main) { [weak self] n in
+		observerForEnterBg = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] n in
 			self?.dateEnteredBg = Date()
 		}
-		observerForEnterFg = NotificationCenter.default.addObserver(forName: .UIApplicationWillEnterForeground, object: nil, queue: .main) { [weak self] n in
+		observerForEnterFg = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] n in
 			guard let strongSelf = self, let dateBg = strongSelf.dateEnteredBg, dateBg.timeIntervalSinceNow <= -15 else {return}
 			strongSelf.loadMainPage()
 		}
@@ -35,8 +35,8 @@ class ViewController: UIViewController, UIWebViewDelegate {
 	
 	deinit {
 		/* Not actually needed with iOS 11 IIRC. */
-		if let observer = observerForEnterBg {NotificationCenter.default.removeObserver(observer, name: .UIApplicationDidEnterBackground, object: nil)}
-		if let observer = observerForEnterFg {NotificationCenter.default.removeObserver(observer, name: .UIApplicationWillEnterForeground, object: nil)}
+		if let observer = observerForEnterBg {NotificationCenter.default.removeObserver(observer, name: UIApplication.didEnterBackgroundNotification, object: nil)}
+		if let observer = observerForEnterFg {NotificationCenter.default.removeObserver(observer, name: UIApplication.willEnterForegroundNotification, object: nil)}
 	}
 	
 	override func didReceiveMemoryWarning() {
