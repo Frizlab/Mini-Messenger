@@ -15,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7B134411229FEF680097DA30 /* Mini Messenger.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mini Messenger.entitlements"; sourceTree = "<group>"; };
 		7B3578691F179B8E00FE34C7 /* Mini Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mini Messenger.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B35786C1F179B8E00FE34C7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7B35786E1F179B8E00FE34C7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +57,7 @@
 		7B35786B1F179B8E00FE34C7 /* Mini Messenger */ = {
 			isa = PBXGroup;
 			children = (
+				7B134411229FEF680097DA30 /* Mini Messenger.entitlements */,
 				7B35786C1F179B8E00FE34C7 /* AppDelegate.swift */,
 				7B35786E1F179B8E00FE34C7 /* ViewController.swift */,
 				7B3578701F179B8E00FE34C7 /* Main.storyboard */,
@@ -99,6 +101,11 @@
 					7B3578681F179B8E00FE34C7 = {
 						CreatedOnToolsVersion = 9.0;
 						LastSwiftMigration = 1020;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
