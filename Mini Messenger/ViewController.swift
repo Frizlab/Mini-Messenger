@@ -18,6 +18,14 @@ class ViewController: UIViewController, UIWebViewDelegate {
 	
 	@IBOutlet var webView: UIWebView!
 	
+	@IBOutlet var bottomContraint: NSLayoutConstraint!
+	
+	deinit {
+		/* Not actually needed with iOS 11 IIRC. */
+		if let observer = observerForEnterBg {NotificationCenter.default.removeObserver(observer, name: UIApplication.didEnterBackgroundNotification, object: nil)}
+		if let observer = observerForEnterFg {NotificationCenter.default.removeObserver(observer, name: UIApplication.willEnterForegroundNotification, object: nil)}
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -33,10 +41,31 @@ class ViewController: UIViewController, UIWebViewDelegate {
 		}
 	}
 	
-	deinit {
-		/* Not actually needed with iOS 11 IIRC. */
-		if let observer = observerForEnterBg {NotificationCenter.default.removeObserver(observer, name: UIApplication.didEnterBackgroundNotification, object: nil)}
-		if let observer = observerForEnterFg {NotificationCenter.default.removeObserver(observer, name: UIApplication.willEnterForegroundNotification, object: nil)}
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		keyboardObserver = NotificationCenter.default.addObserver(forName: UIApplication.keyboardWillChangeFrameNotification, object: nil, queue: .main, using: { [weak self] n in
+			guard let strongSelf = self else {return}
+//			guard let keyboardFrameStart = n.userInfo?[UIApplication.keyboardFrameBeginUserInfoKey] as? CGRect else {return}
+			guard let keyboardFrameEnd = n.userInfo?[UIApplication.keyboardFrameEndUserInfoKey] as? CGRect else {return}
+			let duration = n.userInfo?[UIApplication.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.5
+			
+			UIView.animate(withDuration: duration, animations: {
+				let viewBottomY = strongSelf.view.bounds.maxY - strongSelf.view.safeAreaInsets.bottom
+				let keyboardBottomY = strongSelf.view.convert(keyboardFrameEnd, from: nil).minY
+				strongSelf.bottomContraint.constant = viewBottomY - keyboardBottomY
+				strongSelf.view.layoutIfNeeded()
+			})
+		})
+	}
+	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillDisappear(animated)
+		
+		if let o = keyboardObserver {
+			NotificationCenter.default.removeObserver(o, name: UIApplication.keyboardWillChangeFrameNotification, object: nil)
+			keyboardObserver = nil
+		}
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -64,6 +93,8 @@ class ViewController: UIViewController, UIWebViewDelegate {
 		labelErrorDescription.text = error.localizedDescription
 		UIView.animate(withDuration: 0.25){ self.viewLoading.alpha = 0; self.viewLoadingError.alpha = 1; self.webView.alpha = 0 }
 	}
+	
+	private var keyboardObserver: NSObjectProtocol?
 	
 	private var dateEnteredBg: Date?
 	private var observerForEnterBg: NSObjectProtocol?
